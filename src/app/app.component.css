@@ -1,0 +1,52 @@
+/*!
+ * Start Bootstrap - Blog Home (https://startbootstrap.com/template-overviews/blog-home)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-blog-home/blob/master/LICENSE)
+ */
+
+.content {
+  padding-top: 54px;
+  padding-bottom: 30px;
+}
+
+.input-group-addon {
+  width: auto !important;
+  min-width: 16px !important;
+  line-height: 1.42857143 !important;
+  text-shadow: 0 1px 0 #fff !important;
+  border-width: 1px 0 !important;
+  margin-left: -5px !important;
+  margin-right: -5px !important;
+  padding: 6px 12px !important;
+  font-size: 14px;
+  font-weight: normal;
+  color: #555;
+  text-align: center;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  white-space: nowrap;
+  vertical-align: middle;
+  display: table-cell;
+}
+
+#myBtn {
+  display: none; /* Hidden by default */
+  position: fixed; /* Fixed/sticky position */
+  bottom: 20px; /* Place the button at the bottom of the page */
+  right: 30px; /* Place the button 30px from the right */
+  z-index: 99; /* Make sure it does not overlap */
+  border: none; /* Remove borders */
+  outline: none; /* Remove outline */
+  background-color: #4ab3f4; /* Set a background color */
+  color: white; /* Text color */
+  cursor: pointer; /* Add a mouse pointer on hover */
+  padding: 15px; /* Some padding */
+  border-radius: 10px; /* Rounded corners */
+  font-size: 18px; /* Increase font size */
+  font-weight: bold;
+}
+
+#myBtn:hover {
+  background-color: #1da1f2; /* Add a dark-grey background on hover */
+}

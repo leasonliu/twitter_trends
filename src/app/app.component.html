@@ -1,0 +1,195 @@
+<div class="content">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Twitter Trends</a>
+      <div>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a href="#"
+              ><img
+                src="../assets/icon/Twitter_Logo_Blue.png"
+                width="32px"
+                height="32px"
+            /></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md"></div>
+      <div class="col-md-8">
+        <!-- Search Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Search</h5>
+          <div class="card-body">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search for..."
+                [(ngModel)]="search"
+              />
+              <span class="input-group-btn">
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  (click)="onSearch()"
+                >
+                  Go!
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md"></div>
+    </div>
+    <div class="row">
+      <div class="col-md"></div>
+      <div class="col-md-8">
+        <!-- Categories Widget -->
+        <div class="card">
+          <h5 class="card-header">
+            Trends ·
+            <a
+              href="#"
+              style="font-size: 10pt"
+              data-toggle="modal"
+              data-target="#trendsModalCenter"
+              >Change</a
+            >
+          </h5>
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="trendsModalCenter"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="trendsModalCenterTitle"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <form novalidate #trendsForm="ngForm" (ngSubmit)="onSubmit()">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="trendsModalCenter">Trends</h5>
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body" id="modal-body">
+                    <label for="inputEmail4">Location</label>
+                    <div class="input-group">
+                      <select
+                        class="custom-select"
+                        name="locationID"
+                        [(ngModel)]="form.locationID"
+                        placeholder="Select locations"
+                      >
+                        <option
+                          *ngFor="let location of locations"
+                          [value]="location.id"
+                          >{{ location.name }}</option
+                        >
+                      </select>
+                    </div>
+                    <h1 class="my-4"></h1>
+                    <label for="inputEmail4">Date Range</label>
+                    <div class="input-daterange input-group">
+                      <input
+                        name="bsRangeValue"
+                        class="input-sm form-control"
+                        #drp="bsDaterangepicker"
+                        bsDaterangepicker
+                        [(ngModel)]="bsRangeValue"
+                        [bsConfig]="bsConfig"
+                        [maxDate]="maxDate"
+                      />
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Done</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <ul class="list-group">
+            <a href="#">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                Cras justo odio
+                <span class="badge badge-primary badge-pill">14</span>
+              </li>
+            </a>
+            <a href="#">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                Dapibus ac facilisis in
+                <span class="badge badge-primary badge-pill">2</span>
+              </li>
+            </a>
+            <a href="#">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                Morbi leo risus
+                <span class="badge badge-primary badge-pill">1</span>
+              </li>
+            </a>
+          </ul>
+        </div>
+        <!-- Side Widget -->
+        <!--
+          <div class="card my-4">
+            <h5 class="card-header">Side Widget</h5>
+            <div class="card-body">
+              You can put anything you want inside of these side widgets. They
+              are easy to use, and feature the new Bootstrap 4 card containers!
+            </div>
+          </div>
+        -->
+        <!-- </div> -->
+
+        <!-- Blog Entries Column -->
+        <!-- <div class="col-md-8"> -->
+        <!--
+          <h1 class="my-4">Page Heading <small>Secondary Text</small></h1>
+        -->
+      </div>
+      <div class="col-md"></div>
+    </div>
+    <h1 class="my-4"></h1>
+    <div class="row">
+      <div class="col-md"></div>
+      <div class="col-md">
+        <blockquote *ngFor="let tweet of tweets" class="twitter-tweet" data-lang="en-us">
+          <a href="https://twitter.com/espn/status/1068734450287153153"></a>
+        </blockquote>
+      </div>
+      <div class="col-md"></div>
+    </div>
+    <!-- </div> -->
+    <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+  </div>
+  <!-- /.container -->
+</div>

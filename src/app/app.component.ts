@@ -24,7 +24,7 @@ export class AppComponent {
     this.bsRangeValue = [this.bsValue, this.maxDate];
   }
 
-  url = "http://localhost:9200/twitter_trend/_search";
+  url = "/twitter_trend/_search";
   queryBody = {
     size: 0,
     query: {
@@ -37,7 +37,7 @@ export class AppComponent {
         filter: {
           range: {
             time_stamp: {
-              gt: 1541030400,
+              gt: 1538352000,
               lt: 1543629408
             }
           }

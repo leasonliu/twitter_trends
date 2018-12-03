@@ -55,7 +55,7 @@
         <!-- Categories Widget -->
         <div class="card">
           <h5 class="card-header">
-            {{trendsRegionShown}} {{trendsTimeRangeShown}}·
+            {{ trendsRegionShown }} {{ trendsTimeRangeShown }}·
             <a
               href="#"
               style="font-size: 10pt"
@@ -118,13 +118,6 @@
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-dismiss="modal"
-                    >
-                      Close
-                    </button>
                     <button type="submit" class="btn btn-primary">Done</button>
                   </div>
                 </form>
@@ -132,28 +125,26 @@
             </div>
           </div>
           <ul class="list-group">
-            <a href="#">
+            <a (click)="selectOrSearch(trend.key)" *ngFor="let trend of trends">
               <li
                 class="list-group-item d-flex justify-content-between align-items-center"
               >
-                Cras justo odio
-                <span class="badge badge-primary badge-pill">14</span>
-              </li>
-            </a>
-            <a href="#">
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center"
-              >
-                Dapibus ac facilisis in
-                <span class="badge badge-primary badge-pill">2</span>
-              </li>
-            </a>
-            <a href="#">
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center"
-              >
-                Morbi leo risus
-                <span class="badge badge-primary badge-pill">1</span>
+                {{ trend.key }}
+                <span
+                  class="badge badge-primary badge-pill"
+                  *ngIf="
+                    trend.max_popular.value >= 1000 &&
+                    trend.max_popular.value < 1000000
+                  "
+                  >{{ trend.max_popular.value / 1000 | number: "1.2-2" }}K</span
+                >
+                <span
+                  class="badge badge-primary badge-pill"
+                  *ngIf="trend.max_popular.value >= 1000000"
+                  >{{
+                    trend.max_popular.value / 1000000 | number: "1.2-2"
+                  }}M</span
+                >
               </li>
             </a>
           </ul>
@@ -178,11 +169,34 @@
       </div>
       <div class="col-md"></div>
     </div>
-    <h1 class="my-4"></h1>
+    <div id="tweetsContent" class="row"><h1 class="my-4"></h1></div>
+    <div class="row">
+      <div class="col-md"></div>
+      <div
+        class="alert alert-primary col-md-6"
+        role="alert"
+        *ngIf="selectedOrSearched"
+      >
+        {{ contentOfAlert }}
+      </div>
+      <div class="col-md"></div>
+    </div>
     <div class="row">
       <div class="col-md"></div>
       <div class="col-md">
-        <blockquote *ngFor="let tweet of tweets" class="twitter-tweet" data-lang="en-us">
+        <blockquote class="twitter-tweet" data-lang="en-us">
+          <a href="https://twitter.com/espn/status/1068734450287153153"></a>
+        </blockquote>
+        <blockquote class="twitter-tweet" data-lang="en-us">
+          <a href="https://twitter.com/espn/status/1068734450287153153"></a>
+        </blockquote>
+        <blockquote class="twitter-tweet" data-lang="en-us">
+          <a href="https://twitter.com/espn/status/1068734450287153153"></a>
+        </blockquote>
+        <blockquote class="twitter-tweet" data-lang="en-us">
+          <a href="https://twitter.com/espn/status/1068734450287153153"></a>
+        </blockquote>
+        <blockquote class="twitter-tweet" data-lang="en-us">
           <a href="https://twitter.com/espn/status/1068734450287153153"></a>
         </blockquote>
       </div>

@@ -22,6 +22,8 @@ export class AppComponent {
     this.bsConfig = Object.assign({}, { containerClass: this.colorTheme });
     this.bsValue.setDate(this.bsValue.getDate() - 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
+    this.trendsRegionShown = "Trends";
+    this.trendsTimeRangeShown = "";
   }
 
   url = "/twitter_trend/_search";
@@ -77,7 +79,7 @@ export class AppComponent {
     },
     {
       id: 23424977,
-      name: "U.S"
+      name: "United States"
     },
     {
       id: 23424775,
@@ -108,6 +110,18 @@ export class AppComponent {
     locationID: 0,
     timeRange: null
   };
+  locationIdToName = {
+    2473224: "Pittsburgh",
+    23424977: "United States",
+    23424775: "Canada",
+    23424848: "India",
+    23424856: "Japan",
+    23424975: "England",
+    23424829: "Germany",
+    23424748: "Australia"
+  };
+  trendsRegionShown = "";
+  trendsTimeRangeShown = "";
   search = "";
   tweets = [];
 
@@ -116,12 +130,21 @@ export class AppComponent {
     // id
     this.queryBody.query.bool.must.match.woeid = this.form.locationID;
     // time range
-    this.queryBody.query.bool.filter.range.time_stamp.gt = this.transformDateToUnix(this.form.timeRange[0]);
-    this.queryBody.query.bool.filter.range.time_stamp.lt = this.transformDateToUnix(this.form.timeRange[1]);
+    this.queryBody.query.bool.filter.range.time_stamp.gt = this.transformDateToUnix(
+      this.form.timeRange[0]
+    );
+    this.queryBody.query.bool.filter.range.time_stamp.lt = this.transformDateToUnix(
+      this.form.timeRange[1]
+    );
+    // change trends title
+    if (this.form.locationID !== 0) {
+      this.trendsRegionShown = this.locationIdToName[this.form.locationID] + " trends";
+    }
+    this.trendsTimeRangeShown = "(" + this.transformDateToString(this.form.timeRange[0]) + "-" + this.transformDateToString(this.form.timeRange[1]) + ") ";
 
     console.log(this.queryBody);
     await this.sendPostRequest(this.queryBody).subscribe(
-      (data) => {
+      data => {
         console.log(data);
         // this.tweets = data;
       },
@@ -148,7 +171,7 @@ export class AppComponent {
 
     console.log(this.queryBody);
     await this.sendPostRequest(this.queryBody).subscribe(
-      (data) => {
+      data => {
         console.log(data);
       },
       error => {
@@ -163,5 +186,8 @@ export class AppComponent {
 
   transformDateToUnix(date: Date): number {
     return moment(date, "X").unix();
+  }
+  transformDateToString(date: Date): string {
+    return moment(date).format("MM/DD/YYYY");
   }
 }

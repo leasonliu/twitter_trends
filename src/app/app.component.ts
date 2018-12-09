@@ -23,6 +23,7 @@ export class AppComponent {
     this.bsValue.setDate(this.bsValue.getDate() - 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
     this.onSubmit();
+    this.placeholderStyle = { height: "0px" };
   }
 
   url_trend = "/twitter_trend/_search";
@@ -111,10 +112,6 @@ export class AppComponent {
       name: "India"
     },
     {
-      id: 23424856,
-      name: "Japan"
-    },
-    {
       id: 23424975,
       name: "England"
     },
@@ -136,7 +133,6 @@ export class AppComponent {
     23424977: "United States",
     23424775: "Canada",
     23424848: "India",
-    23424856: "Japan",
     23424975: "England",
     23424829: "Germany",
     23424748: "Australia"
@@ -148,11 +144,14 @@ export class AppComponent {
   tweets = []; // tweets shown
   selectedOrSearched = false; // show after selected or search
   contentOfAlert = "";
+  placeholderStyle = { height: "0px" };
 
   async onSubmit() {
     this.form.timeRange = this.bsRangeValue;
     // clear alert
     this.selectedOrSearched = false;
+    this.tweets = [];
+    this.placeholderStyle = { height: "1200px" };
     // id
     this.queryBody.query.bool.must.match.woeid = this.form.locationID;
     // time range
@@ -187,16 +186,20 @@ export class AppComponent {
   async onSearch(key: string) {
     if (key) this.search = key;
     if (this.search.trim() === "") return;
-    // change alert content
-    this.selectOrSearch(this.search);
+    this.placeholderStyle = { height: "1200px" };
     // key
     this.searchBody.query.bool.must[0].match_phrase.text = this.search.trim();
-    
+
     console.log("SearchBody: ", this.searchBody);
     await this.sendPostRequest(this.url_tweet, this.searchBody).subscribe(
       (data: any) => {
         console.log("Tweets: ", data);
         this.tweets = data.hits.hits;
+        // change alert content
+        this.selectOrSearch(this.search);
+        setTimeout(() => {
+          this.placeholderStyle = { height: "0px" };
+        }, 2000);
       },
       error => {
         console.error(error);

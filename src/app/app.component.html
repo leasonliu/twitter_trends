@@ -172,29 +172,11 @@
     <div class="row">
       <div class="col-md"></div>
       <div class="col-md">
-        <blockquote class="twitter-tweet" data-lang="en-us">
-          <a
-            href="https://publish.twitter.com/oembed?
-          url=https://twitter.com/Lakers/status/1064329077568372736"
-          ></a>
-        </blockquote>
-
-        
-          <ngx-tweet
-            *ngFor="let tweet of tweets"
-            tweetId="{{tweet._id}}"
-          ></ngx-tweet>
-       
-
-        <!-- <blockquote
-          class="twitter-tweet"
-          data-lang="en-us"
+        <ngx-tweet
           *ngFor="let tweet of tweets"
-        >
-          <a
-            href="https://twitter.com/{{tweet._source.screen_name}}/status/{{tweet._id}}"
-          ></a>
-        </blockquote> -->
+          tweetId="{{tweet._id}}"
+        ></ngx-tweet>
+        <div [ngStyle]="placeholderStyle"></div>
       </div>
       <div class="col-md"></div>
     </div>

@@ -23,111 +23,10 @@ export class AppComponent {
     this.bsValue.setDate(this.bsValue.getDate() - 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
     this.onSubmit();
-    this.trends = [
-      {
-        key: "House",
-        doc_count: 45,
-        max_popular: { value: 1869508.0 }
-      },
-      {
-        key: "Happy Halloween",
-        doc_count: 19,
-        max_popular: { value: 1663766.0 }
-      },
-      {
-        key: "Congress",
-        doc_count: 17,
-        max_popular: { value: 1074425.0 }
-      },
-      {
-        key: "Democrats",
-        doc_count: 12,
-        max_popular: { value: 1040744.0 }
-      },
-      {
-        key: "#ENDviolence",
-        doc_count: 11,
-        max_popular: { value: 518689.0 }
-      },
-      {
-        key: "Thousand Oaks",
-        doc_count: 11,
-        max_popular: { value: 401818.0 }
-      },
-      {
-        key: "#ElectionDay",
-        doc_count: 45,
-        max_popular: { value: 374736.0 }
-      },
-      {
-        key: "#Riverdale",
-        doc_count: 10,
-        max_popular: { value: 280121.0 }
-      },
-      {
-        key: "#ElectionNight",
-        doc_count: 14,
-        max_popular: { value: 269070.0 }
-      },
-      {
-        key: "#ARSLIV",
-        doc_count: 12,
-        max_popular: { value: 264875.0 }
-      },
-      {
-        key: "Alec Baldwin",
-        doc_count: 14,
-        max_popular: { value: 229860.0 }
-      },
-      {
-        key: "Dez Bryant",
-        doc_count: 9,
-        max_popular: { value: 213625.0 }
-      },
-      {
-        key: "Infowars",
-        doc_count: 9,
-        max_popular: { value: 193010.0 }
-      },
-      {
-        key: "#StrangerThingsDay",
-        doc_count: 19,
-        max_popular: { value: 180703.0 }
-      },
-      {
-        key: "#Midterms2018",
-        doc_count: 18,
-        max_popular: { value: 158062.0 }
-      },
-      {
-        key: "#ThankUNext",
-        doc_count: 9,
-        max_popular: { value: 136601.0 }
-      },
-      {
-        key: "Steelers",
-        doc_count: 11,
-        max_popular: { value: 134427.0 }
-      },
-      {
-        key: "Lucy McBath",
-        doc_count: 12,
-        max_popular: { value: 133263.0 }
-      },
-      {
-        key: "Michael Thomas",
-        doc_count: 13,
-        max_popular: { value: 120772.0 }
-      },
-      {
-        key: "Penguins",
-        doc_count: 41,
-        max_popular: { value: 118557.0 }
-      }
-    ];
   }
 
-  url = "/twitter_trend/_search";
+  url_trend = "/twitter_trend/_search";
+  url_tweet = "/twitter_tweet/_search";
   queryBody = {
     size: 0,
     query: {
@@ -172,6 +71,27 @@ export class AppComponent {
         }
       }
     }
+  };
+  searchBody = {
+    query: {
+      bool: {
+        must: [
+          {
+            match_phrase: {
+              text: ""
+            }
+          }
+        ]
+      }
+    },
+    size: 20,
+    sort: [
+      {
+        popularity: {
+          order: "desc"
+        }
+      }
+    ]
   };
   locations = [
     {
@@ -231,13 +151,15 @@ export class AppComponent {
 
   async onSubmit() {
     this.form.timeRange = this.bsRangeValue;
+    // clear alert
+    this.selectedOrSearched = false;
     // id
     this.queryBody.query.bool.must.match.woeid = this.form.locationID;
     // time range
     this.queryBody.query.bool.filter.range.time_stamp.gt = this.transformDateToUnix(
       this.form.timeRange[0]
     );
-    this.queryBody.query.bool.filter.range.time_stamp.lt = this.transformDateToUnix(
+    this.queryBody.query.bool.filter.range.time_stamp.lt = this.transformDatePlusOneToUnix(
       this.form.timeRange[1]
     );
     // change trends title
@@ -250,11 +172,11 @@ export class AppComponent {
       this.transformDateToString(this.form.timeRange[1]) +
       ") ";
 
-    console.log(this.queryBody);
-    await this.sendPostRequest(this.queryBody).subscribe(
+    console.log("QueryBody: ", this.queryBody);
+    await this.sendPostRequest(this.url_trend, this.queryBody).subscribe(
       (data: any) => {
-        console.log(data);
-        this.tweets = data.aggregations.most_popular_trend.buckets;
+        console.log("Trends: ", data);
+        this.trends = data.aggregations.most_popular_trend.buckets;
       },
       error => {
         console.error(error);
@@ -262,25 +184,19 @@ export class AppComponent {
     );
   }
 
-  async onSearch() {
+  async onSearch(key: string) {
+    if (key) this.search = key;
     if (this.search.trim() === "") return;
-    console.log(this.search);
     // change alert content
     this.selectOrSearch(this.search);
-    // id
-    this.queryBody.query.bool.must.match.woeid = this.form.locationID;
-    // time range
-    this.queryBody.query.bool.filter.range.time_stamp.gt = this.transformDateToUnix(
-      this.form.timeRange[0]
-    );
-    this.queryBody.query.bool.filter.range.time_stamp.lt = this.transformDateToUnix(
-      this.form.timeRange[1]
-    );
-
-    console.log(this.queryBody);
-    await this.sendPostRequest(this.queryBody).subscribe(
-      data => {
-        console.log(data);
+    // key
+    this.searchBody.query.bool.must[0].match_phrase.text = this.search.trim();
+    
+    console.log("SearchBody: ", this.searchBody);
+    await this.sendPostRequest(this.url_tweet, this.searchBody).subscribe(
+      (data: any) => {
+        console.log("Tweets: ", data);
+        this.tweets = data.hits.hits;
       },
       error => {
         console.error(error);
@@ -291,17 +207,21 @@ export class AppComponent {
   selectOrSearch(key: string) {
     let tweetsContent = document.getElementById("tweetsContent");
     tweetsContent.scrollIntoView();
-    this.contentOfAlert = key;
+    this.contentOfAlert = 'Top 20 tweets for "' + key + '"';
     this.selectedOrSearched = true;
-    console.log(key);
   }
 
-  sendPostRequest(body) {
-    return this.httpClient.post(this.url, body, { observe: "response" });
+  sendPostRequest(url, body) {
+    return this.httpClient.post(url, body);
   }
 
   transformDateToUnix(date: Date): number {
     return moment(date, "X").unix();
+  }
+  transformDatePlusOneToUnix(date: Date): number {
+    return moment(date, "X")
+      .add(1, "day")
+      .unix();
   }
   transformDateToString(date: Date): string {
     return moment(date).format("MM/DD/YYYY");

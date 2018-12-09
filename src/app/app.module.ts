@@ -8,6 +8,8 @@ import { HttpClientModule } from "@angular/common/http";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MatSelectModule, MatFormFieldModule } from "@angular/material";
 
+import { NgxTweetModule } from "ngx-tweet";
+
 @NgModule({
   declarations: [
     AppComponent
@@ -20,7 +22,8 @@ import { MatSelectModule, MatFormFieldModule } from "@angular/material";
     BrowserAnimationsModule,
     MatSelectModule,
     MatFormFieldModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    NgxTweetModule
   ],
   providers: [],
   bootstrap: [AppComponent],

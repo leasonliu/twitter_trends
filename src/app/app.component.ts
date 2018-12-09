@@ -176,6 +176,9 @@ export class AppComponent {
       (data: any) => {
         console.log("Trends: ", data);
         this.trends = data.aggregations.most_popular_trend.buckets;
+        setTimeout(() => {
+          this.placeholderStyle = { height: "0px" };
+        }, 2000);
       },
       error => {
         console.error(error);
